@@ -1,0 +1,70 @@
+services:
+    backend:
+        build:
+            context: ./docker/backend
+        container_name: laravel
+        working_dir: /var/www
+        volumes:
+            - ./backend:/var/www
+        networks:
+            - shopping
+        depends_on:
+            - mariadb
+        command: >
+            sh -c "
+                chmod -R 775 storage bootstrap/cache &&
+                php artisan config:clear &&
+                php artisan cache:clear &&
+                php-fpm
+            "
+
+    frontend:
+        image: node:22-alpine
+        container_name: vue
+        working_dir: /app
+        volumes:
+            - ./frontend:/app
+        networks:
+            - shopping
+        tty: true
+        stdin_open: true
+        command: sh
+        ports:
+            - "5173:5173"
+
+    web-server:
+        image: nginx:alpine
+        container_name: nginx_web
+        ports:
+            - "8080:80"
+        volumes:
+            - ./backend:/var/www
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - shopping
+        depends_on:
+            - backend
+            - frontend
+
+    mariadb:
+        image: mariadb:10.11
+        container_name: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: program
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+        ports:
+            - "3307:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+        networks:
+            - shopping
+
+networks:
+    shopping:
+        driver: bridge
+
+volumes:
+    db_data:

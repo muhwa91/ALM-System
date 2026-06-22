@@ -1,0 +1,12 @@
+# 내부 AI/에디터 설정
+.claude/
+.vscode/
+.idea/
+
+# 비밀정보
+**/.env
+*.key
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,40 @@
+.sidebar {
+    .menu-link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s ease;
+        color: var(--bc, #d1d5db);
+    }
+
+    .menu-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-link.active {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+        font-weight: 600;
+    }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    max-height: 0;
+    opacity: 0;
+}
+
+.slide-enter-to,
+.slide-leave-from {
+    max-height: 800px;
+    opacity: 1;
+}
